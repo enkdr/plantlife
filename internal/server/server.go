@@ -26,7 +26,8 @@ func NewServer() *http.Server {
 	}
 
 	server := &http.Server{
-		Addr:    fmt.Sprintf(":%d", NewServer.port),
+		Addr: fmt.Sprintf(":%d", NewServer.port),
+		// register all routes
 		Handler: NewServer.RegisterRoutes(),
 	}
 

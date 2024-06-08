@@ -1,20 +1,20 @@
 package database
 
 
+
+
+
+
 func main() {
 	var err error
 
-	if len(os.Args) >= 1 {
-		err = godotenv.Load(".env.dev")
-		if err != nil {
-			log.Fatalf("Error loading .env file: %s", err)
-		}
+	config, err := config.GetConfig()
+	if err != nil {
+		log.Fatalln("Failed to retrieve configs:", err)
 	}
 
 	connStr := fmt.Sprintf("port=%s host=%s user=%s dbname=%s password=%s sslmode=disable",
-		os.Getenv("DB_PORT"), os.Getenv("DB_HOST"), os.Getenv("DB_USER"), os.Getenv("DB_NAME"), os.Getenv("DB_PASSWORD"))
-
-	fmt.Println(connStr)
+		config.DB_PORT, config.DB_HOST, config.DB_USER, config.DB_NAME, config.DB_PASSWORD)
 
 	db, err = sqlx.Connect("postgres", connStr)
 	if err != nil {
@@ -28,6 +28,7 @@ func main() {
 	} else {
 		log.Println("Successfully connected to the database")
 	}
+
 }
 
 
