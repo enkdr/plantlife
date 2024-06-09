@@ -5,17 +5,9 @@ import (
 
 	"plantlife/internal/server"
 
-	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
 
-var db *sqlx.DB
-
-type Plant struct {
-	ID          int    `db:"id"`
-	Name        string `db:"name"`
-	Description string `db:"description"`
-}
 
 func main() {
 

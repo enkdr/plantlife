@@ -5,16 +5,24 @@ import (
 	"log"
 	"net/http"
 	"plantlife/config"
+	"plantlife/internal/database"
 
+	"github.com/jmoiron/sqlx"
 	_ "github.com/joho/godotenv/autoload"
 )
 
+
 type Server struct {
 	port int
-	// db   database.Service
+	db   *sqlx.DB
 }
 
 func NewServer() *http.Server {
+		
+	db, err := database.InitDB()
+	if err != nil {
+		log.Fatalf("failed to initialize database: %v", err)
+	}
 
 	config, err := config.GetConfig()
 	if err != nil {
@@ -23,6 +31,7 @@ func NewServer() *http.Server {
 
 	NewServer := &Server{
 		port: config.PORT,
+		db:   db,
 	}
 
 	server := &http.Server{
@@ -30,7 +39,7 @@ func NewServer() *http.Server {
 		// register all routes
 		Handler: NewServer.RegisterRoutes(),
 	}
-
+	
 	return server
 
 }
