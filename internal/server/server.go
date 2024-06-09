@@ -11,14 +11,13 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 )
 
-
 type Server struct {
 	port int
 	db   *sqlx.DB
 }
 
 func NewServer() *http.Server {
-		
+
 	db, err := database.InitDB()
 	if err != nil {
 		log.Fatalf("failed to initialize database: %v", err)
@@ -39,7 +38,7 @@ func NewServer() *http.Server {
 		// register all routes
 		Handler: NewServer.RegisterRoutes(),
 	}
-	
+
 	return server
 
 }
