@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"plantlife/config"
 	"plantlife/internal/database"
 
@@ -25,13 +26,13 @@ func NewServer() *http.Server {
 		log.Fatalln("Failed to retrieve configs:", err)
 	}
 
-	var templatesPath string
-	templatesPath = "templates/index.html"
-
 	db, err := database.InitDB(config)
 	if err != nil {
 		log.Fatalf("failed to initialize database: %v", err)
 	}
+
+	currentDir, err := os.Getwd()
+	templatesPath := currentDir + config.TEMPLATE_PATH
 
 	NewServer := &Server{
 		templates: template.Must(template.ParseFiles(templatesPath)),
@@ -40,8 +41,7 @@ func NewServer() *http.Server {
 	}
 
 	server := &http.Server{
-		Addr: fmt.Sprintf(":%d", NewServer.port),
-		// register all routes
+		Addr:    fmt.Sprintf(":%d", NewServer.port),
 		Handler: NewServer.RegisterRoutes(),
 	}
 

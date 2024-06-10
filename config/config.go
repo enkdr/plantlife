@@ -9,12 +9,13 @@ import (
 )
 
 type Config struct {
-	PORT        int
-	DB_PORT     string
-	DB_HOST     string
-	DB_USER     string
-	DB_NAME     string
-	DB_PASSWORD string
+	PORT          int
+	DB_PORT       string
+	DB_HOST       string
+	DB_USER       string
+	DB_NAME       string
+	DB_PASSWORD   string
+	TEMPLATE_PATH string
 }
 
 func GetConfig() (Config, error) {
@@ -22,11 +23,12 @@ func GetConfig() (Config, error) {
 	config := Config{}
 
 	envVars := map[string]*string{
-		"DB_PORT":     &config.DB_PORT,
-		"DB_HOST":     &config.DB_HOST,
-		"DB_USER":     &config.DB_USER,
-		"DB_NAME":     &config.DB_NAME,
-		"DB_PASSWORD": &config.DB_PASSWORD,
+		"DB_PORT":       &config.DB_PORT,
+		"DB_HOST":       &config.DB_HOST,
+		"DB_USER":       &config.DB_USER,
+		"DB_NAME":       &config.DB_NAME,
+		"DB_PASSWORD":   &config.DB_PASSWORD,
+		"TEMPLATE_PATH": &config.TEMPLATE_PATH,
 	}
 
 	for key, value := range envVars {
@@ -46,16 +48,6 @@ func GetConfig() (Config, error) {
 		return Config{}, errors.New("invalid PORT value")
 	}
 	config.PORT = port
-
-	// port, _ := strconv.Atoi(os.Getenv("PORT"))
-	// config := Config{
-	// 	PORT:        port,
-	// 	DB_PORT:     os.Getenv("DB_PORT"),
-	// 	DB_HOST:     os.Getenv("DB_HOST"),
-	// 	DB_USER:     os.Getenv("DB_USER"),
-	// 	DB_NAME:     os.Getenv("DB_NAME"),
-	// 	DB_PASSWORD: os.Getenv("DB_PASSWORD"),
-	// }
 
 	return config, nil
 }
