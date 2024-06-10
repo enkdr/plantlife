@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"plantlife/config"
@@ -12,25 +13,30 @@ import (
 )
 
 type Server struct {
-	port int
-	db   *sqlx.DB
+	templates *template.Template
+	port      int
+	db        *sqlx.DB
 }
 
 func NewServer() *http.Server {
-
-	db, err := database.InitDB()
-	if err != nil {
-		log.Fatalf("failed to initialize database: %v", err)
-	}
 
 	config, err := config.GetConfig()
 	if err != nil {
 		log.Fatalln("Failed to retrieve configs:", err)
 	}
 
+	var templatesPath string
+	templatesPath = "templates/index.html"
+
+	db, err := database.InitDB(config)
+	if err != nil {
+		log.Fatalf("failed to initialize database: %v", err)
+	}
+
 	NewServer := &Server{
-		port: config.PORT,
-		db:   db,
+		templates: template.Must(template.ParseFiles(templatesPath)),
+		port:      config.PORT,
+		db:        db,
 	}
 
 	server := &http.Server{

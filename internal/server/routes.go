@@ -10,7 +10,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", s.IndexHandler)
 	mux.HandleFunc("/home", s.HomeHandler)
-	mux.HandleFunc("/plant", s.PlantHandler)
+	mux.HandleFunc("/plants", s.PlantHandler)
 	return mux
 }
 
@@ -20,6 +20,14 @@ func (s *Server) IndexHandler(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) HomeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("home handler")
+
+	err := s.templates.ExecuteTemplate(w, "index.html", nil)
+
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
 }
 
 func (s *Server) PlantHandler(w http.ResponseWriter, r *http.Request) {
