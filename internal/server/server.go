@@ -31,7 +31,7 @@ func NewServer() *http.Server {
 		log.Fatalf("failed to initialize database: %v", err)
 	}
 
-	currentDir, err := os.Getwd()
+	currentDir, _ := os.Getwd()
 	templatesPath := currentDir + config.TEMPLATE_PATH
 
 	NewServer := &Server{
