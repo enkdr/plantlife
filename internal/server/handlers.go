@@ -11,7 +11,9 @@ type pageData struct {
 }
 
 func (s *Server) IndexHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("index handler")
+
+		fmt.Println("index handler")
+
 }
 
 func (s *Server) HomeHandler(w http.ResponseWriter, r *http.Request) {
