@@ -6,11 +6,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
-	"time"
 
-	_ "github.com/joho/godotenv/autoload"
-	_ "github.com/lib/pq" // Import PostgreSQL driver
+	_ "github.com/mattn/go-sqlite3"
 )
 
 var db *sql.DB
@@ -20,7 +17,16 @@ type Plant struct {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	rows, err := db.Query("SELECT name from plantlife.plant")
+
+	var err error
+
+	db, err := sql.Open("sqlite3", "./db/plantlife.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT name from plant")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -45,35 +51,17 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(plantsJSON)
 
+	fmt.Println("OK")
+
 }
 
 func main() {
 
-	connStr := fmt.Sprintf("host=%s user=%s dbname=%s password=%s sslmode=disable",
-		os.Getenv("DB_HOST"), os.Getenv("DB_USER"), os.Getenv("DB_NAME"), os.Getenv("DB_PASSWORD"))
-
-	fmt.Println(connStr)
-
-	var err error
-	for retries := 0; retries < 10; retries++ {
-		db, err = sql.Open("postgres", connStr)
-		if err == nil {
-			break
-		}
-		log.Printf("Error connecting to database: %v. Retrying in 5 seconds...", err)
-		time.Sleep(5 * time.Second)
-	}
-
-	if err != nil {
-		log.Fatalf("Failed to connect to database after multiple retries: %v", err)
-	}
-	fmt.Println("postgres connected")
-
 	http.HandleFunc("/", handler)
 
-	fmt.Println("Server running on port 8080")
-	err = http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }

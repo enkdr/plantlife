@@ -1,5 +1,5 @@
 insert into
-    plantlife.plant (
+    plant (
         name,
         description,
         image,
@@ -24,7 +24,7 @@ values
     );
 
 insert into
-    plantlife.plant (
+    plant (
         name,
         description,
         image,
@@ -49,7 +49,7 @@ values
     );
 
 insert into
-    plantlife.plant (
+    plant (
         name,
         description,
         image,
@@ -74,7 +74,7 @@ values
     );
 
 insert into
-    plantlife.plant (
+    plant (
         name,
         description,
         image,
@@ -99,7 +99,7 @@ values
     );
 
 insert into
-    plantlife.plant (
+    plant (
         name,
         description,
         image,
@@ -124,7 +124,7 @@ values
     );
 
 insert into
-    plantlife.plant (
+    plant (
         name,
         description,
         image,
@@ -149,7 +149,7 @@ values
     );
 
 insert into
-    plantlife.plant (
+    plant (
         name,
         description,
         image,
@@ -174,7 +174,7 @@ values
     );
 
 insert into
-    plantlife.plant (
+    plant (
         name,
         description,
         image,
@@ -199,7 +199,7 @@ values
     );
 
 insert into
-    plantlife.plant (
+    plant (
         name,
         description,
         image,
@@ -224,7 +224,7 @@ values
     );
 
 insert into
-    plantlife.plant (
+    plant (
         name,
         description,
         image,
@@ -249,7 +249,7 @@ values
     );
 
 insert into
-    plantlife.plant (
+    plant (
         name,
         description,
         image,
