@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/rs/cors"
 )
 
 var db *sql.DB
@@ -17,7 +18,6 @@ type Plant struct {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-
 	var err error
 
 	db, err := sql.Open("sqlite3", "./db/plantlife.db")
@@ -26,7 +26,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT name from plant")
+	rows, err := db.Query("SELECT name FROM plant")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -52,16 +52,24 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	w.Write(plantsJSON)
 
 	fmt.Println("OK")
-
 }
 
 func main() {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", handler)
 
-	http.HandleFunc("/", handler)
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:5173"}, // Allow requests from React app
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+	})
 
-	err := http.ListenAndServe(":8080", nil)
+	handlerWithCors := c.Handler(mux)
+
+	fmt.Println("Serving on localhost:3000")
+	err := http.ListenAndServe(":3000", handlerWithCors)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }
