@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 
+	_ "github.com/joho/godotenv/autoload"
 	_ "github.com/lib/pq" // Import PostgreSQL driver
 )
 
@@ -19,7 +20,7 @@ type Plant struct {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	rows, err := db.Query("SELECT name from plant")
+	rows, err := db.Query("SELECT name from plantlife.plant")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -51,6 +52,8 @@ func main() {
 	connStr := fmt.Sprintf("host=%s user=%s dbname=%s password=%s sslmode=disable",
 		os.Getenv("DB_HOST"), os.Getenv("DB_USER"), os.Getenv("DB_NAME"), os.Getenv("DB_PASSWORD"))
 
+	fmt.Println(connStr)
+
 	var err error
 	for retries := 0; retries < 10; retries++ {
 		db, err = sql.Open("postgres", connStr)
@@ -63,9 +66,8 @@ func main() {
 
 	if err != nil {
 		log.Fatalf("Failed to connect to database after multiple retries: %v", err)
-	} else {
-		fmt.Println("postgres connected")
 	}
+	fmt.Println("postgres connected")
 
 	http.HandleFunc("/", handler)
 

@@ -1,6 +1,7 @@
 -- schema.sql
+create schema if not exists plantlife;
 create table
-     if not exists plant (
+     if not exists plantlife.plant (
         id serial primary key,
         name varchar(255) not null,
         description varchar(255) not null,
@@ -16,7 +17,7 @@ create table
     );
 
 create table
-    if not exists users (
+    if not exists plantlife.users (
         id serial primary key,
         name varchar(255) not null,
         email varchar(255) not null,
@@ -26,16 +27,16 @@ create table
     );
 
 create table
-    if not exists plant_users (
+    if not exists plantlife.plant_users (
         id serial primary key,
-        plant_id int not null references plant (id),
-        users_id int not null references users (id),
+        plant_id int not null references plantlife.plant (id),
+        users_id int not null references plantlife.users (id),
         created_at timestamp not null default now (),
         updated_at timestamp not null default now ()
     );
 
 create table
-    if not exists store (
+    if not exists plantlife.store (
         id serial primary key,
         name varchar(255) not null,
         address varchar(255) not null,
@@ -47,11 +48,11 @@ create table
     );
 
 create table
-    if not exists plant_store (
+    if not exists plantlife.plant_store (
         id serial primary key,
         quantity int not null,
-        plant_id int not null references plant (id),
-        store_id int not null references store (id),
+        plant_id int not null references plantlife.plant (id),
+        store_id int not null references plantlife.store (id),
         created_at timestamp not null default now (),
         updated_at timestamp not null default now ()
     );

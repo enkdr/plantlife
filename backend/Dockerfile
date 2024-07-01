@@ -1,5 +1,5 @@
 # Use the official Golang image as base
-FROM golang:latest
+FROM golang:1.22.1
 
 # Set the working directory inside the container
 WORKDIR /backend
