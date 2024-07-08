@@ -15,18 +15,19 @@ var db *sql.DB
 
 type Plant struct {
 	Name string `json:"name"`
+	Description string `json:"description"`
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	var err error
 
-	db, err := sql.Open("sqlite3", "./db/plantlife.db")
+	db, err := sql.Open("sqlite3", "./db/plants.db")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT name FROM plant")
+	rows, err := db.Query("SELECT name, description FROM plant")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -36,7 +37,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	var plants []Plant
 	for rows.Next() {
 		var plant Plant
-		if err := rows.Scan(&plant.Name); err != nil {
+		if err := rows.Scan(&plant.Name, &plant.Description); err != nil {
 			log.Println(err)
 			continue
 		}
